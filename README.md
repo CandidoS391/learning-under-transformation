@@ -13,7 +13,7 @@ This notebook investigates how adversarial training affects the robustness of Co
 
 ### References
 
-Cubuk, E. D., Zoph, B., Mane, D., Vasudevan, V., & Le, Q. V. (2019). AutoAugment: Learning augmentation strategies from data. *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 113–123). https://doi.org/10.1109/CVPR.2019.00020
+Cubuk, Ekin D., et al. "AutoAugment: Learning Augmentation Strategies from Data." *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 2019, pp. 113–123. https://arxiv.org/abs/1805.09501.
 
 Cubuk, E. D., Zoph, B., Shlens, J., & Le, Q. V. (2020). RandAugment: Practical automated data augmentation with a reduced search space. *Advances in Neural Information Processing Systems, 33*, 18613–18624. https://arxiv.org/abs/1909.13719
 
