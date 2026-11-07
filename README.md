@@ -1,6 +1,17 @@
-# Biweekly-Report-3
+# Learning-Under-Transformation
 
-## Candido Seneriches IV
+## Introduction
+Artificial Intelligence (AI) models are designed to recognize patterns in many types of data, and use them to make predictions on previously unseen examples. However achieving high accuracy on previously seen datasets doesn't necessarily guarantee that a model has learned reliable or generalizable representations. In real-world applications, input data may differ from the examples encountered during training due to changes in lighting, orientation, noise, or other environmental conditions. Furthermore, even small, deliberately constructed perturbations can sometimes cause neural networks to make incorrect predictions despite the modified inputs appearing to be nearly identical to the originals.
+
+Understanding how neural networks respond to these transformations is therefore an important aspect of developing reliable AI systems. **Data augmentation** introduces variations into training examples to encourage models to learn patterns that generalize beyond the original training distribution. While **Adversarial perturbations**, on the other hand expose vulnerabilities by introducing carefully constructed changes designed to disrupt a model's predictions. Although these approaches serve different purposes, both investigate how sensitive learned representations are to changes in their inputs.
+
+To see how these models perform under changes to their data, this project explores both perspectives of data transformations by conducting various experiments involving Convolutional Neural Networks (CNNs). By studying the effects of data augmentation on classification performance and examining the limitations of adversarial training under different attacks, the investigation aims to better understand the relationship between generalization, robustness, and the reliability of learned representations.
+
+Ultimately, the central motivation is to examine not only **whether a neural network can classify an image correctly, but also how reliably it maintains its predictions when the data is transformed or deliberately disrupted.**
+
+*Note: This project is a continuation of a report done for MATH161A (Math of Machine Learning) at the University of California, Riverside. Here, it is mean't to be an independent computational research project.*
+
+## Research Notebooks
 
 ### autoaugment_randaugment_mixup.ipynb
 
@@ -10,6 +21,10 @@ This notebook compares AutoAugment, RandAugment, and Mixup against a standard-au
 
 This notebook investigates how adversarial training affects the robustness of a small CNN on MNIST. We compare a standard CNN, trained on clean images, with a CNN trained on a 50/50 mixture of clean and Fast Gradient Sign Method (FGSM) adversarial examples (ε = 0.20). Both models are evaluated against FGSM (on the full test set) and a 10-step Projected Gradient Descent (PGD) attack with one random start (on a fixed 1,000-image subset) for perturbation magnitudes up to ε = 0.30. After FGSM adversarial training, accuracy under FGSM rises to near the clean level (98.97% at ε = 0.20, versus 44.43% for the standard CNN) while clean accuracy is largely preserved. However, PGD reduces the FGSM-trained model to 0.0% accuracy at ε = 0.20, and it is less accurate than the standard CNN under PGD at ε = 0.05–0.15. Because its FGSM accuracy is essentially equal to its clean accuracy, this indicates that FGSM became ineffective against the model rather than that the model became robust. The results come from a single training run and do not identify the underlying mechanism (for example, gradient masking, catastrophic overfitting, or label leaking).
 
+## Reproducibility
+The investigations are implemented in Python using Jupyter Notebooks and PyTorch. Their experimental configurations, model architectures, training procedures, and evaluation methods are documented in the respective notebooks.
+
+The original experiments were developed using Kaggle's computational environment. Execution time and certain reproducibility characteristics may vary depending on hardware, software versions, and available accelerators.
 
 ### References
 
