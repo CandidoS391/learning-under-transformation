@@ -29,14 +29,14 @@ A small CNN (about 289k parameters) was trained on CIFAR-10 for 50 epochs under 
 
 ### 2. Adversarial Training: FGSM vs. PGD
 
-A standard CNN trained on clean MNIST images was compared with a CNN trained on a 50/50 mixture of clean and FGSM adversarial examples (ε = 0.20). Both were attacked with FGSM (full test set) and a 10-step PGD attack with one random start (fixed 1,000-image subset) for ε up to 0.30.
+A standard CNN trained on clean MNIST images was compared with a CNN trained on a 50/50 mixture of clean and FGSM adversarial examples ($\epsilon=0.20$). Both models were evaluated against FGSM and iterative PGD attacks, initially using a single training seed and subsequently extending the evaluation to three seeds (42, 123, and 2026). The extended experiments included PGD-10 and PGD-20 with three random restarts at $\epsilon=0.10$ and $\epsilon=0.20$, evaluated on a fixed 1,000-image test subset.
 
-- **Against FGSM**, the adversarially trained model looks highly robust: 98.97% at ε = 0.20, versus 44.43% for the standard CNN, with clean accuracy largely preserved.
-- **Against PGD**, that robustness disappears: accuracy falls to **0.0%** at ε = 0.20, and the model is *less* accurate than the standard CNN at ε = 0.05–0.15.
-- Because the model's FGSM accuracy is essentially equal to its clean accuracy, the more likely reading is that **FGSM became ineffective against this model, not that the model became robust.**
-- The results come from a single training run and do not identify the underlying mechanism (for example, gradient masking, catastrophic overfitting, or label leaking).
+- **Against FGSM**, adversarial training produces substantial improvements: the FGSM-trained CNN achieved 98.97% accuracy at $\epsilon=0.20$, compared with 44.43% for the standard CNN on the full MNIST test set, while largely preserving clean accuracy.
+- **Against PGD**, that apparent robustness disappears. Across three training seeds, the FGSM-trained CNN maintained 98.73% mean FGSM accuracy at $\epsilon=0.20$, but both PGD-10 and PGD-20 reduced its accuracy to 0.00% on the fixed test subset.
+- **At smaller perturbations**, the discrepancy persists. At $\epsilon=0.10$, the FGSM-trained CNN achieved 96.57% mean FGSM accuracy but only 55.07% under PGD-20, compared with 68.27% PGD-20 accuracy for the standard CNN.
+- **During training**, PGD-5 validation accuracy deteriorated sharply for both monitored FGSM-trained runs, despite relatively high clean and FGSM accuracy. This behavior is consistent with catastrophic overfitting, although the underlying mechanism remains unconfirmed.
 
-**Takeaway:** evaluating robustness with a single weak attack can be misleading. A stronger, iterative attack is needed before concluding a model is robust.
+**Takeaway**: High accuracy against FGSM does not necessarily indicate meaningful adversarial robustness. The repeated experiments demonstrate that resistance to a single-step attack can coexist with substantial vulnerability to stronger iterative attacks, emphasizing the importance of evaluating robustness beyond the attack used during training.
 
 ## Repository Contents
 
