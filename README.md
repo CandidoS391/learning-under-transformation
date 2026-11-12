@@ -1,4 +1,4 @@
-# Learning-Under-Transformation
+# Learning Under Transformation
 
 ## Introduction
 AI models learn patterns from data and use them to make predictions on examples they have not seen before. However high accuracy on familiar data does not guarantee that a model has learned reliable, generalizable representations. And in practice, inputs can differ from the training examples because of changes in lighting, orientation, noise, or other conditions. Even small, deliberately constructed perturbations can cause a neural network to misclassify an image that looks nearly identical to the original.
@@ -15,17 +15,21 @@ The central question is not only **whether a neural network classifies an image 
 
 | Notebook | Question | Headline result |
 |---|---|---|
-| `autoaugment_randaugment_mixup.ipynb` | Do advanced augmentations beat standard augmentation on CIFAR-10? | RandAugment scored highest (90.58% vs. 90.02% baseline), but the 0.56-point gap is within test-set sampling uncertainty. No method is shown to outperform the baseline. |
-| `adversarial_examples_fgsm_pgd.ipynb` | Does FGSM adversarial training make an MNIST CNN robust? | Accuracy under FGSM (ε = 0.20) rose from 44.43% to 98.97%, but a 10-step PGD attack drove the same model to 0.0%. |
+| `autoaugment_randaugment_mixup.ipynb` | Do advanced augmentations beat standard augmentation on CIFAR-10? | Across three seeds, RandAugment achieved the highest mean test accuracy (90.15% vs. 89.90% baseline), but its advantage was inconsistent. Only one of nine paired McNemar comparisons was significant after Holm correction. |
+| `adversarial_examples_fgsm_pgd.ipynb` | Does FGSM adversarial training make an MNIST CNN robust? | Accuracy under FGSM (ε = 0.20) rose from 44.43% to 98.97%, but a 10-step PGD attack drove the same model to 0.0% on the matched test subset. |
 
 ### 1. Augmentation: AutoAugment, RandAugment, and Mixup
 
-A small CNN (about 289k parameters) was trained on CIFAR-10 for 50 epochs under four conditions: standard augmentation (baseline), AutoAugment, RandAugment, and Mixup. All four share the same architecture and initial weights, and were compared on test accuracy, macro F1-score, per-class accuracy, and training time.
+A small CNN (approximately 289,000 parameters) was trained on CIFAR-10 for 50 epochs under four configurations: standard augmentation (baseline), AutoAugment, RandAugment, and Mixup. Each configuration was evaluated across three random seeds (42, 123, and 2026), producing 12 training runs. All models used the same architecture and training schedule, with matching initial weights within each seed.
 
-- RandAugment had the highest test accuracy, 90.58% versus 90.02% for the baseline.
-- This difference is comparable to the sampling uncertainty of the test set and comes from a **single training run**, so the experiment does not establish that any method outperforms the baseline.
-- AutoAugment and RandAugment took about **1.8× longer** to train on this hardware, mainly because of CPU-side data loading.
-- Training accuracy was not recorded, so effects on generalization (the train/test gap) were not assessed.
+The experiments compared test accuracy, macro F1-score, class-wise performance, clean training accuracy, computational cost, and paired statistical significance.
+
+- **Classification performance**: RandAugment achieved the highest mean test accuracy of 90.15%, compared with 89.90% for baseline, 89.38% for AutoAugment, and 89.70% for Mixup. However, RandAugment's 0.25-percentage-point mean advantage varied across seeds.
+- **Statistical significance**: Nine exact McNemar tests were conducted with Holm correction. Only RandAugment at seed 2026 demonstrated a statistically significant improvement over baseline (adjusted p-value = 0.0306). The results do not establish consistent superiority for any augmentation method.
+- **Training accuracy**: All three augmentation methods exhibited lower clean training accuracy and smaller observed training–test accuracy gaps than baseline. This is consistent with a regularization effect but did not consistently translate into improved test performance.
+- **Computational cost**: AutoAugment and RandAugment required approximately 15.90 and 16.34 minutes per run, respectively, compared with 8.89 minutes for baseline and 9.03 minutes for Mixup. The additional overhead was primarily associated with CPU-side image transformations under the tested Kaggle configuration.
+
+**Takeaway: Augmentation can reduce training-set fitting without necessarily improving predictive performance**. Under the tested architecture and training schedule, the additional computational expense of AutoAugment and RandAugment was not accompanied by consistent improvements in test accuracy.
 
 ### 2. Adversarial Training: FGSM vs. PGD
 
@@ -44,6 +48,8 @@ A standard CNN trained on clean MNIST images was compared with a CNN trained on 
 |---|---|
 | `autoaugment_randaugment_mixup.ipynb` | CIFAR-10 augmentation comparison |
 | `adversarial_examples_fgsm_pgd.ipynb` | MNIST adversarial training and attack evaluation |
+| [`results/`](results/) | Experimental data, training histories, predictions, statistical summaries, and figures supporting the notebooks |
+| [`results/README.md`](results/README.md) | Documentation and organization of the saved experimental results |
 
 ## Reproducibility
 
