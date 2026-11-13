@@ -53,11 +53,52 @@ A standard CNN trained on clean MNIST images was compared with a CNN trained on 
 
 ## Reproducibility
 
-Both investigations are implemented in Python with PyTorch in Jupyter notebooks. Configurations, architectures, training procedures, and evaluation methods are documented in each notebook.
+Both investigations are implemented in Python using PyTorch in Jupyter notebooks. The model architectures, experimental configurations, training procedures, evaluation methods, and mathematical explanations are documented within their respective notebooks.
 
-The experiments were run on Kaggle. Runtime and some numerical results may vary with hardware, software versions, and available accelerators.
+All experiments were conducted on **Kaggle Notebooks using GPU acceleration**. The notebooks can be reproduced independently using the following procedure.
 
-### References
+### Running the Experiments on Kaggle
+
+1. Sign in to [Kaggle](https://www.kaggle.com/) and create a new notebook.
+2. Import either `autoaugment_randaugment_mixup.ipynb` or `adversarial_examples_fgsm_pgd.ipynb` from this repository.
+3. Under the notebook's **Session Options**, enable a GPU accelerator (the experiments were developed using two NVIDIA T4 GPUs).
+4. Ensure the required Python packages are available. Both notebooks use PyTorch and standard scientific Python libraries.
+5. Run the notebook cells sequentially, starting with the imports, dataset preparation, and model definitions.
+6. Once execution finishes, inspect the generated figures, evaluation metrics, and statistical analyses.
+7. Save a Kaggle notebook version with its outputs enabled to preserve the experimental results.
+
+Both notebooks use publicly available datasets downloaded through the experiment code: **CIFAR-10** for augmentation and **MNIST** for adversarial robustness. Internet access may be required during the initial dataset download.
+
+### Expected Runtime
+
+The following estimates describe the original single-seed experiments, before the additional multi-seed evaluations.
+
+| Notebook                              | Original experiment                                            | Approximate runtime                                                |
+| ------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `autoaugment_randaugment_mixup.ipynb` | Four CNN configurations, 50 epochs each                        | **50–60 minutes**                                                  |
+| `adversarial_examples_fgsm_pgd.ipynb` | Two CNNs, 12 epochs each, followed by FGSM and PGD evaluations | **Several minutes for training, plus adversarial evaluation time** |
+
+For the augmentation notebook, the four original training configurations require approximately 50 minutes combined under the recorded Kaggle environment. The adversarial notebook requires approximately 3.6 minutes for its two original training runs, excluding the additional time required for attack generation and evaluation.
+
+**Extended experiments:** Both notebooks also contain follow-up experiments across three random seeds (42, 123, and 2026). Executing these extensions requires additional computation beyond the original experiments, particularly for the augmentation notebook's 12 total training runs and the adversarial notebook's multi-restart PGD evaluations.
+
+### Extracting Experimental Results
+
+Both notebooks automatically save selected experimental outputs to Kaggle's `/kaggle/working/` directory during execution. These outputs include performance summaries, training histories, predictions, figures, and model checkpoints, depending on the experiment.
+
+To access and preserve these results:
+
+1. Complete the notebook's execution and open Kaggle's Output panel.
+2. Locate the generated experimental results directory:
+  - Augmentation: `/kaggle/working/report3_augmentation/`
+  - Adversarial robustness: `/kaggle/working/report3_followup/`
+3. Download the desired output files directly from Kaggle. A ZIP archive can also be created manually if a complete local backup is preferred.
+4. Save a Kaggle notebook version with Save output for this version enabled to preserve the generated files beyond the active session.
+5. For the experimental data used in this report, refer to the repository's results/ directory, which contains selected CSV summaries, training histories, predictions, and figures.
+
+The notebooks do not automatically package their results into ZIP archives. Model checkpoints and other generated files remain available through the corresponding saved Kaggle outputs, provided those outputs were preserved. The public repository contains selected experimental data rather than the complete model checkpoints.
+
+## References
 
 The experiments in this repository draw on the following research papers concerning data augmentation, adversarial training, and neural network robustness.
 
